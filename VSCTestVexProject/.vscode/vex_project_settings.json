@@ -1,0 +1,18 @@
+{
+	"extension": {
+		"version": "0.4.1",
+		"json": 1
+	},
+	"project": {
+		"name": "VSCTestVexProject",
+		"description": "",
+		"creationDate": "10/05/2023, 22:24:22",
+		"platform": "V5",
+		"language": "cpp",
+		"slot": 1,
+		"sdkVersion": "V5_20220726_10_00_00",
+		"cpp": {
+			"includePath": []
+		}
+	}
+}
