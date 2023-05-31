@@ -95,6 +95,7 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
 remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor)
 
 
+
 def autonCode():
 #turning from start point to angle toward goal, TO CHANGE VALUES
    rightFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False) 
@@ -144,5 +145,6 @@ def autonCode():
    leftFrontMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
    leftBackMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
    #to insert further code. (rotate & 4bar + claw contact with elevation bar TBD)
+
 
 autonCode()
