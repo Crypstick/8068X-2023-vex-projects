@@ -13,6 +13,7 @@ from vex import *
 # Robot configuration code
 brain = Brain()
 Remote = Controller(PRIMARY)
+x = int()
 
 rightFrontMotor = Motor(Ports.PORT1, GearSetting.RATIO_18_1, True)
 rightBackMotor = Motor(Ports.PORT5, GearSetting.RATIO_18_1, True)
@@ -20,13 +21,10 @@ leftFrontMotor = Motor(Ports.PORT4, GearSetting.RATIO_18_1, False)
 leftBackMotor = Motor(Ports.PORT6, GearSetting.RATIO_18_1, False)
 
 Punchermotor_1 = Motor(Ports.PORT5, GearSetting.RATIO_36_1, False)
-clawMotor_1 = Motor(Ports.PORT6, GearSetting.RATIO_18_1, False)
-
-fourBarMotorRight = Motor(Ports.PORT9, GearSetting.RATIO_18_1, False) #test out if reverse, havent done it
-fourBarMotorLeft = Motor(Ports.PORT10, GearSetting.RATIO_18_1, True) #test out if reverse as well, havent done it either
+rollerMotor_1 = Motor(Ports.PORT6, GearSetting.RATIO_18_1, False)
+rollerMotor_2 = Motor(Ports.PORT7, GearSetting.RATIO_18_1, False)
 
 limit_switch_a = Limit(brain.three_wire_port.a)
-# Brain should be defined by default
 
 
 def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor):
@@ -49,8 +47,6 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
    leftBackMotor.spin(FORWARD)
 
    # Punchermotor control
-   #charge to certain position and then release after a certain degree
-   
    if Remote.buttonR2.pressing():
       Punchermotor_1.set_velocity(50, PERCENT)
       while limit_switch_a.pressing != True:
@@ -66,30 +62,20 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
    else:
       Punchermotor_1.stop()
 
-   #claw control
+   #roller intake control
    if Remote.buttonL2.pressing():
-      clawMotor_1.set_velocity(50, PERCENT)
-      clawMotor_1.spin(FORWARD)
+      rollerMotor_1.set_velocity(50, PERCENT)
+      rollerMotor_2.set_velocity(50, PERCENT)
+      rollerMotor_1.spin(FORWARD)
+      rollerMotor_2.spin(FORWARD)
    elif Remote.buttonL1.pressing():
-      clawMotor_1.set_velocity(-50, PERCENT)
-      clawMotor_1.spin(FORWARD)
+      rollerMotor_1.set_velocity(-50, PERCENT)
+      rollerMotor_2.set_velocity(-50, PERCENT)
+      rollerMotor_1.spin(FORWARD)
+      rollerMotor_2.spin(FORWARD)
    else:
-      clawMotor_1.stop()
-
-   if Remote.buttonA.pressing(): #change buttonA to whichever we actually using
-      fourBarMotorRight.set_velocity(25, PERCENT)
-      fourBarMotorLeft.set_velocity(25, PERCENT)
-      fourBarMotorRight.spin(FORWARD)
-      fourBarMotorLeft.spin(FORWARD)
-   elif Remote.buttonB.pressing(): #change buttonB to whichever we actually using
-      fourBarMotorRight.set_velocity(-25, PERCENT)
-      fourBarMotorLeft.set_velocity(-25, PERCENT)
-      fourBarMotorRight.spin(FORWARD)
-      fourBarMotorLeft.spin(FORWARD)
-   else:
-      fourBarMotorRight.stop()
-      fourBarMotorLeft.stop()
-
+      rollerMotor_1.stop()
+      rollerMotor_2.stop()
 
 
 remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor)
@@ -97,54 +83,66 @@ remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackM
 
 
 def autonCode():
+  #init
+  global x
+
 #turning from start point to angle toward goal, TO CHANGE VALUES
-   rightFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False) 
-   rightBackMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-   wait(500, MSEC)
+  rightFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False) 
+  rightBackMotor.spin_for(FORWARD, 400, DEGREES, wait=True)
+  print("Turning COMPLETE")
+  wait(500, MSEC)
 #to move closer to goal and punch alliance triball, TO CHANGE VALUES
-   rightFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   rightBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   leftFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   leftBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   Punchermotor_1.spin_for(FORWARD, 360-Punchermotor_1.position(), DEGREES, wait=True)
-   wait(200, MSEC)
+  rightFrontMotor.spin_for(FORWARD, 500, DEGREES, wait=False)
+  rightBackMotor.spin_for(FORWARD, 500, DEGREES, wait=False)
+  leftFrontMotor.spin_for(FORWARD, 500, DEGREES, wait=False)
+  leftBackMotor.spin_for(FORWARD, 500, DEGREES, wait=True)
+  rollerMotor_1.spin_for(FORWARD, -400, DEGREES, wait=False)
+  rollerMotor_2.spin_for(FORWARD, 400, DEGREES, wait=True)
+  print("Moving closer to goal and firing COMPLETE")
+  wait(500, MSEC)
 #to rotate toward the diagonal boundary, TO CHANGE VALUES
-   rightFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   rightBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   leftFrontMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
-   leftBackMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
-   wait(200, MSEC)
+  rightFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
+  rightBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
+  leftFrontMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
+  leftBackMotor.spin_for(FORWARD, -360, DEGREES, wait=True)
+  print("Rotating toward diagonal boundary COMPLETE")
+  wait(500, MSEC)
 #to move toward the diagonal boundary, TO CHANGE VALUES
-   rightFrontMotor.spin_for(FORWARD, 200, DEGREES, wait=False)
-   rightBackMotor.spin_for(FORWARD, 200, DEGREES, wait=False)
-   leftFrontMotor.spin_for(FORWARD, 200, DEGREES, wait=False)
-   leftBackMotor.spin_for(FORWARD, 200, DEGREES, wait=False)
-   wait(200, MSEC)
-#engage claw to pick up new triball, TO CHANGE VALUE
-   clawMotor_1.spin_for(FORWARD, 360, DEGREES, wait=False)
-   clawMotor_1.stop() #assuming default mode is hold, else change it :)
-
+  rightFrontMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
+  rightBackMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
+  leftFrontMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
+  leftBackMotor.spin_for(FORWARD, 300, DEGREES, wait=True)
+  print("Moving toward diagonal boundary COMPLETE")
+  wait(500, MSEC)
+#engage rolleer to pick up new triball, TO CHANGE VALUE
+  rollerMotor_1.spin_for(FORWARD, 400, DEGREES, wait=False)
+  rollerMotor_2.spin_for(FORWARD, -400, DEGREES, wait=True)
 #move back, TO CHANGE VALUES
-   rightFrontMotor.spin_for(FORWARD, -200, DEGREES, wait=False)
-   rightBackMotor.spin_for(FORWARD, -200, DEGREES, wait=False)
-   leftFrontMotor.spin_for(FORWARD, -200, DEGREES, wait=False)
-   leftBackMotor.spin_for(FORWARD, -200, DEGREES, wait=False)
+  rightFrontMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
+  rightBackMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
+  leftFrontMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
+  leftBackMotor.spin_for(FORWARD, -300, DEGREES, wait=True)
+  print("Moving back COMPLETE")
+  wait(500, MSEC)
 #rotate back, TO CHANGE VALUES
-   rightFrontMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
-   rightBackMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
-   leftFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   leftBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-   wait(200, MSEC)
-#to let go of claw grip and fire, TO CHANGE VALUES
-   clawMotor_1.spin_for(FORWARD, -250, DEGREES, wait=True)
-   Punchermotor_1.spin_for(FORWARD, 360, DEGREES, wait=True)
-
+  rightFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
+  rightBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
+  leftFrontMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
+  leftBackMotor.spin_for(FORWARD, -360, DEGREES, wait=True)
+  print("rotate back COMPLETE")
+  wait(500, MSEC)
+  
 #endgame code to be inserted. else, code for contact to elevation bar
-   rightFrontMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
-   rightBackMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
-   leftFrontMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
-   leftBackMotor.spin_for(FORWARD, -300, DEGREES, wait=False)
-   #to insert further code. (rotate & 4bar + claw contact with elevation bar TBD)
+  rightFrontMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
+  rightBackMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
+  leftFrontMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
+  leftBackMotor.spin_for(FORWARD, 300, DEGREES, wait=True)
+  print("Moving toward elevation bar COMPLETE")
+  wait(500, MSEC)
+  #to insert further code. (rotate &  contact with elevation bar TBD)
+   
+  x += 1
 
 
-autonCode()
+if x == 1:
+   print("code COMPLETE")
