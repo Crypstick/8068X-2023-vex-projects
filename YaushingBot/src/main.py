@@ -16,12 +16,15 @@ Remote = Controller(PRIMARY)
 
 rightFrontMotor = Motor(Ports.PORT15, GearSetting.RATIO_18_1, True)
 rightBackMotor = Motor(Ports.PORT1, GearSetting.RATIO_18_1, True)
-leftFrontMotor = Motor(Ports.PORT18, GearSetting.RATIO_18_1, False)
+leftFrontMotor = Motor(Ports.PORT20, GearSetting.RATIO_18_1, False)
 leftBackMotor = Motor(Ports.PORT9, GearSetting.RATIO_18_1, False)
 
 Punchermotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_36_1, True)
 
-limit_switch_a = Limit(brain.three_wire_port.a)
+rollerMotor_1 = Motor(Ports.PORT18, GearSetting.RATIO_18_1, True)
+rollerMotor_2 = Motor(Ports.PORT19, GearSetting.RATIO_18_1, False)
+
+limit_switch_a = Limit(brain.three_wire_port.b)
 
 fwd = Remote.axis3.position()
 sideways = Remote.axis1.position()
@@ -101,7 +104,7 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
     sideways = Remote.axis1.position()
     leftTrain = fwd + sideways
     rightTrain = fwd - sideways
-    print(limit_switch_a.pressing())
+
    
     #drivetrain
     rightFrontMotor.set_velocity(rightTrain, PERCENT)
@@ -112,31 +115,54 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
     rightBackMotor.spin(FORWARD)
     leftFrontMotor.spin(FORWARD)
     leftBackMotor.spin(FORWARD)
-    if limit_switch_a.pressing() == False:
+
+    #Puncher code
+    if limit_switch_a.pressing() == 0:
       Punchermotor_1.set_velocity(50, PERCENT)
       Punchermotor_1.spin(FORWARD)
-    elif limit_switch_a.pressing() == True:
+      print("NOT PRESSED", limit_switch_a.pressing())
+    elif limit_switch_a.pressing() == 1:
+      Punchermotor_1.stop()
       Punchermotor_1.set_velocity(0, PERCENT)
       Punchermotor_1.spin(FORWARD)
       Punchermotor_1.stop()
+      print("PRESSED", limit_switch_a.pressing())
     if Remote.buttonR2.pressing() == True:
       while Remote.buttonR2.pressing() == True:
         Punchermotor_1.set_velocity(100, PERCENT)
         Punchermotor_1.spin(FORWARD)
+    #roller control
+    if Remote.buttonR1.pressing() == True:
+      rollerMotor_1.set_velocity(100, PERCENT)
+      rollerMotor_2.set_velocity(100, PERCENT)
+      rollerMotor_1.spin(REVERSE)
+      rollerMotor_2.spin(REVERSE)
 
-    '''''
-    if Remote.buttonR2.pressing():
-      Punchermotor_1.set_velocity(50, PERCENT)
-      while limit_switch_a.pressing != True:
-        Punchermotor_1.spin(FORWARD)
+    print("END CYCLE", limit_switch_a.pressing())
+'''
+    if Remote.buttonR1.pressing() == True:
+      rollerMotor_1.set_velocity(75, PERCENT)
+      rollerMotor_2.set_velocity(75, PERCENT)
+      rollerMotor_1.spin(REVERSE)
+      rollerMotor_2.spin(REVERSE)
     else:
-      Punchermotor_1.stop()
-    if Remote.buttonR2.pressing() and limit_switch_a.pressing == True:
-      Punchermotor_1.set_velocity(50, PERCENT)
-      while limit_switch_a == True:
-        Punchermotor_1.spin(FORWARD)
-    else:
-      Punchermotor_1.stop()
+      rollerMotor_1.stop()
+      rollerMotor_2.stop()
+
+'''
+'''''
+if Remote.buttonR2.pressing():
+  Punchermotor_1.set_velocity(50, PERCENT)
+  while limit_switch_a.pressing != True:
+    Punchermotor_1.spin(FORWARD)
+else:
+  Punchermotor_1.stop()
+if Remote.buttonR2.pressing() and limit_switch_a.pressing == True:
+  Punchermotor_1.set_velocity(50, PERCENT)
+  while limit_switch_a == True:
+    Punchermotor_1.spin(FORWARD)
+else:
+  Punchermotor_1.stop()
       '''
 
 

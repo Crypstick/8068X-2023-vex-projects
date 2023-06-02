@@ -139,7 +139,7 @@ def autonCode():
   leftBackMotor.spin_for(FORWARD, 300, DEGREES, wait=True)
   print("Moving toward elevation bar COMPLETE")
   wait(500, MSEC)
-  #to insert further code. (rotate &  contact with elevation bar TBD)
+  #to insert further code. (rotate & contact with elevation bar TBD)
    
   x += 1
 
