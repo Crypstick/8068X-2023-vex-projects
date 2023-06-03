@@ -14,17 +14,17 @@ from vex import *
 brain = Brain()
 Remote = Controller(PRIMARY)
 
+#change PORTS.PORTX based on each port numbering
 rightFrontMotor = Motor(Ports.PORT15, GearSetting.RATIO_18_1, True)
 rightBackMotor = Motor(Ports.PORT1, GearSetting.RATIO_18_1, True)
 leftFrontMotor = Motor(Ports.PORT20, GearSetting.RATIO_18_1, False)
 leftBackMotor = Motor(Ports.PORT9, GearSetting.RATIO_18_1, False)
 
-Punchermotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_36_1, True)
+Punchermotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_36_1, True) #similar PORTS.PORTX
 
-rollerMotor_1 = Motor(Ports.PORT18, GearSetting.RATIO_18_1, True)
-rollerMotor_2 = Motor(Ports.PORT19, GearSetting.RATIO_18_1, False)
+#INSERT ENDGAME MOTOR
 
-limit_switch_a = Limit(brain.three_wire_port.b)
+limit_switch_a = Limit(brain.three_wire_port.b) #change .b to whichever port on the competition
 
 fwd = Remote.axis3.position()
 sideways = Remote.axis1.position()
@@ -131,13 +131,8 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
       while Remote.buttonR2.pressing() == True:
         Punchermotor_1.set_velocity(100, PERCENT)
         Punchermotor_1.spin(FORWARD)
-    #roller control
-    if Remote.buttonR1.pressing() == True:
-      rollerMotor_1.set_velocity(100, PERCENT)
-      rollerMotor_2.set_velocity(100, PERCENT)
-      rollerMotor_1.spin(REVERSE)
-      rollerMotor_2.spin(REVERSE)
-
+    #insert endgame ifelse code @JAYDEN, 
+    
     print("END CYCLE", limit_switch_a.pressing())
 '''
     if Remote.buttonR1.pressing() == True:

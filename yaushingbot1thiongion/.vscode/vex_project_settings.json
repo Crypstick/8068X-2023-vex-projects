@@ -1,0 +1,18 @@
+{
+	"extension": {
+		"version": "0.4.2",
+		"json": 1
+	},
+	"project": {
+		"name": "yaushingbot1thiongion",
+		"description": "",
+		"creationDate": "03/06/2023, 11:53:39",
+		"platform": "V5",
+		"language": "python",
+		"slot": 1,
+		"sdkVersion": "V5_1_0_1_15",
+		"python": {
+			"main": "src/main.py"
+		}
+	}
+}
