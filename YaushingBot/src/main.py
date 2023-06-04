@@ -15,10 +15,10 @@ brain = Brain()
 Remote = Controller(PRIMARY)
 
 #change PORTS.PORTX based on each port numbering
-rightFrontMotor = Motor(Ports.PORT15, GearSetting.RATIO_18_1, True)
-rightBackMotor = Motor(Ports.PORT1, GearSetting.RATIO_18_1, True)
-leftFrontMotor = Motor(Ports.PORT20, GearSetting.RATIO_18_1, False)
-leftBackMotor = Motor(Ports.PORT9, GearSetting.RATIO_18_1, False)
+rightFrontMotor = Motor(Ports.PORT1, GearSetting.RATIO_18_1, True)
+rightBackMotor = Motor(Ports.PORT5, GearSetting.RATIO_18_1, True)
+leftFrontMotor = Motor(Ports.PORT4, GearSetting.RATIO_18_1, False)
+leftBackMotor = Motor(Ports.PORT6, GearSetting.RATIO_18_1, False)
 
 Punchermotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_36_1, True) #similar PORTS.PORTX
 
