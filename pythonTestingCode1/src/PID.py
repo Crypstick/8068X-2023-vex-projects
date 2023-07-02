@@ -24,6 +24,16 @@ time_spent_settled = float()
 time_spent_running = float()
 '''
 
+
+#PID Code
+
+#   Please change values according to what needs to be done
+#   Genuinely have no idea what the hell the values are meant
+#   to be, I think I gotta ask Zachary on what I gotta do to
+#   get the values.
+
+#   Usage: PID(error, kp, ki, kd, starti, settle_error, settle_time, timeout)
+#   and somehow, BOOM!???? IDK ANYMORE MAN
 class PID:
     def _init_(self, error, kp, ki, kd, starti, settle_error, settle_time, timeout):
         self.error = 0
