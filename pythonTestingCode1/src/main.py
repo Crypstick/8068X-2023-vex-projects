@@ -31,7 +31,7 @@ rollerMotor_1 = Motor(Ports.PORT9, GearSetting.RATIO_18_1, True)
 cataMotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_18_1, False)
 
 limit_switch_a = Limit(brain.three_wire_port.a)
-  
+
 
 
 def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor):
@@ -58,22 +58,6 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
     leftMiddleMotor.spin(FORWARD)
     leftBackMotor.spin(FORWARD)
 
-    # Punchermotor control
-    if Remote.buttonR2.pressing():
-      Punchermotor_1.set_velocity(50, PERCENT)
-      while limit_switch_a.pressing != True:
-          Punchermotor_1.spin(FORWARD)
-      sleep(10, MSEC)
-    else:
-      Punchermotor_1.stop()
-    if Remote.buttonR2.pressing() and limit_switch_a.pressing == True:
-      Punchermotor_1.set_velocity(50, PERCENT)
-      while limit_switch_a == True:
-          Punchermotor_1.spin(FORWARD)
-      sleep(10, MSEC)
-    else:
-      Punchermotor_1.stop()
-
     #roller intake control
     if Remote.buttonL2.pressing():
       rollerMotor_1.set_velocity(100, PERCENT)
@@ -85,7 +69,7 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
       rollerMotor_1.stop()
 
     #cata control
-    if Remote.buttonX.pressing():
+    if Remote.buttonR2.pressing():
       cataMotor_1.set_velocity(100, PERCENT)
       cataMotor_1.spin(FORWARD)
     else:
