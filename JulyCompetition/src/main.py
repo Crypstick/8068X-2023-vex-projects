@@ -9,7 +9,6 @@
 
 # Library imports
 from vex import *
-from PID import *
 
 # Robot configuration code
 brain = Brain()
@@ -19,18 +18,18 @@ x = int()
 
 
 #Motor configurations
-rightFrontMotor = Motor(Ports.PORT1, GearSetting.RATIO_18_1, False)
-rightMiddleMotor = Motor(Ports.PORT2, GearSetting.RATIO_18_1, False)
-rightBackMotor = Motor(Ports.PORT3, GearSetting.RATIO_18_1, True)
-leftFrontMotor = Motor(Ports.PORT4, GearSetting.RATIO_18_1, True)
-leftMiddleMotor = Motor(Ports.PORT5, GearSetting.RATIO_18_1, True)
-leftBackMotor = Motor(Ports.PORT6, GearSetting.RATIO_18_1, False)
+rightFrontMotor = Motor(Ports.PORT11, GearSetting.RATIO_18_1, False)
+rightMiddleMotor = Motor(Ports.PORT12, GearSetting.RATIO_18_1, False)
+rightBackMotor = Motor(Ports.PORT13, GearSetting.RATIO_18_1, True)
+leftFrontMotor = Motor(Ports.PORT5, GearSetting.RATIO_18_1, True)
+leftMiddleMotor = Motor(Ports.PORT6, GearSetting.RATIO_18_1, True)
+leftBackMotor = Motor(Ports.PORT7, GearSetting.RATIO_18_1, False)
 
-Punchermotor_1 = Motor(Ports.PORT5, GearSetting.RATIO_36_1, False)
+
 rollerMotor_1 = Motor(Ports.PORT9, GearSetting.RATIO_18_1, True)
 cataMotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_18_1, False)
 
-limit_switch_a = Limit(brain.three_wire_port.a)
+limit_button_h = Limit(brain.three_wire_port.h)
 
 
 
@@ -38,7 +37,7 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
   while True:
     global x
     #init
-    fwd = Remote.axis3.position()
+    fwd = (Remote.axis3.position())
     sideways = Remote.axis1.position()
     leftTrain = fwd + sideways
     rightTrain = fwd - sideways
@@ -68,12 +67,22 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
     else:
       rollerMotor_1.stop()
 
-    #cata control
-    if Remote.buttonR2.pressing():
+    #cata control + limit switch code
+    if limit_button_h.pressing() == 0:
       cataMotor_1.set_velocity(100, PERCENT)
       cataMotor_1.spin(FORWARD)
-    else:
+      print("NOT PRESSED", limit_button_h.pressing())
+    elif limit_button_h.pressing() == 1:
       cataMotor_1.stop()
+      cataMotor_1.set_velocity(0, PERCENT)
+      cataMotor_1.spin(FORWARD)
+      cataMotor_1.stop()
+      print("PRESSED", limit_button_h.pressing())
+    if Remote.buttonR2.pressing() == True:
+      while Remote.buttonR2.pressing() == True:
+        cataMotor_1.set_velocity(100, PERCENT)
+        cataMotor_1.spin(FORWARD)
+    
 
 
 remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor)
