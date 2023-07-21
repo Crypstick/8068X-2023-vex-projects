@@ -31,6 +31,30 @@ cataMotor_1 = Motor(Ports.PORT8, GearSetting.RATIO_18_1, False)
 
 limit_button_h = Limit(brain.three_wire_port.h)
 
+#autonomous code blocks for simplification
+def goStraight(speed, distance):
+  rightFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  rightMiddleMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  rightBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  leftFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  leftMiddleMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  leftBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=True)
+
+def rotateRight(speed, distance):
+  rightFrontMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
+  rightMiddleMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
+  rightBackMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
+  leftFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  leftBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  leftBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=True)
+
+def rotateLeft(speed, distance):
+  rightFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  rightMiddleMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  rightBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
+  leftFrontMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
+  leftBackMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
+  leftBackMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=True)
 
 
 def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor):
@@ -58,10 +82,10 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
     leftBackMotor.spin(FORWARD)
 
     #roller intake control
-    if Remote.buttonL2.pressing():
+    if Remote.buttonL1.pressing():
       rollerMotor_1.set_velocity(100, PERCENT)
       rollerMotor_1.spin(FORWARD)
-    elif Remote.buttonL1.pressing():
+    elif Remote.buttonL2.pressing():
       rollerMotor_1.set_velocity(-100, PERCENT)
       rollerMotor_1.spin(FORWARD)
     else:
@@ -78,12 +102,11 @@ def remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftB
       cataMotor_1.spin(FORWARD)
       cataMotor_1.stop()
       print("PRESSED", limit_button_h.pressing())
-    if Remote.buttonR2.pressing() == True:
-      while Remote.buttonR2.pressing() == True:
+    if Remote.buttonR1.pressing() == True:
+      while Remote.buttonR1.pressing() == True:
         cataMotor_1.set_velocity(100, PERCENT)
         cataMotor_1.spin(FORWARD)
     
-
 
 remoteControl(Remote, rightFrontMotor, rightBackMotor, leftFrontMotor, leftBackMotor)
 
@@ -91,70 +114,38 @@ def autonCode():
 #init
   global x
 #moving forward to push alliance triball inside, TO CHANGE VALUES
-  rightFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftMiddleMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, 400, DEGREES, wait=True)
+  goStraight(1, -400)
+
   #to add roller back spin if applicable
   print("triball deposit COMPLETE")
   wait(500, MSEC)
   #to move closer to goal and punch alliance triball, TO CHANGE VALUES
-  rightFrontMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftMiddleMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, -400, DEGREES, wait=True)
+  goStraight(1, 400)
   print("Moving back to starting zone for turning COMPLETE")
   wait(500, MSEC)
   #to rotate toward the alliance bar, TO CHANGE VALUES
-  rightFrontMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, 360, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, -360, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, -360, DEGREES, wait=True)
+  rotateRight(1, 360)
   print("Rotating toward alliance bar COMPLETE")
   wait(500, MSEC)
   #to move forward to push triball below bar toward our side, TO CHANGE VALUES
-  rightFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftMiddleMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, 400, DEGREES, wait=True)
+  goStraight(1, -400)
   print("Push triball below bar toward our side COMPLETE")
   wait(500, MSEC)
   #move back for matchload, TO CHANGE VALUES
-  rightFrontMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftMiddleMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, -400, DEGREES, wait=True)
+  goStraight(1, 400)
   print("Moving back for matchload COMPLETE")
   wait(500, MSEC)
 
   #to add 360 rotation if cata requires
 
   #rotate back for matchload, TO CHANGE VALUES 
-  rightFrontMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, -400, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftMiddleMotor.spin_for(FORWARD, 400, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, 400, DEGREES, wait=True)
+  rotateRight(1, 400)
   print("rotate back COMPLETE")
   
   wait(500, MSEC)
 
   #endgame code to be inserted. else, code for contact to elevation bar
-  rightFrontMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
-  rightBackMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
-  leftFrontMotor.spin_for(FORWARD, 300, DEGREES, wait=False)
-  leftBackMotor.spin_for(FORWARD, 300, DEGREES, wait=True)
+  goStraight(1, 300)
   print("Moving toward elevation bar COMPLETE")
   wait(500, MSEC)
   #to insert further code. (rotate & contact with elevation bar TBD)
