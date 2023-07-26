@@ -18,44 +18,31 @@ x = int()
 
 
 #Motor configurations
-rightFrontMotor = Motor(Ports.PORT18, GearSetting.RATIO_18_1, True)
-rightMiddleMotor = Motor(Ports.PORT19, GearSetting.RATIO_18_1, True)
-rightBackMotor = Motor(Ports.PORT20, GearSetting.RATIO_18_1, False)
-leftFrontMotor = Motor(Ports.PORT8, GearSetting.RATIO_18_1, True)
-leftMiddleMotor = Motor(Ports.PORT7, GearSetting.RATIO_18_1, False)
-leftBackMotor = Motor(Ports.PORT6, GearSetting.RATIO_18_1, True)
+rightFrontMotor = Motor(Ports.PORT18, GearSetting.RATIO_6_1, False)
+rightMiddleMotor = Motor(Ports.PORT19, GearSetting.RATIO_6_1, False)
+rightBackMotor = Motor(Ports.PORT20, GearSetting.RATIO_6_1, True)
+rightDriveSmart = MotorGroup(rightFrontMotor, rightMiddleMotor, rightBackMotor)
+leftFrontMotor = Motor(Ports.PORT8, GearSetting.RATIO_6_1, False)
+leftMiddleMotor = Motor(Ports.PORT7, GearSetting.RATIO_6_1, True)
+leftBackMotor = Motor(Ports.PORT6, GearSetting.RATIO_6_1, False)
+leftDriveSmart = MotorGroup(leftFrontMotor, leftMiddleMotor, leftBackMotor)
+driveTrain = DriveTrain(leftDriveSmart, rightDriveSmart, units=MM)
 
 
-rollerMotor_1 = Motor(Ports.PORT10, GearSetting.RATIO_18_1, True)
+rollerMotor_1 = Motor(Ports.PORT10, GearSetting.RATIO_6_1, True)
 cataMotor_1 = Motor(Ports.PORT9, GearSetting.RATIO_18_1, True)
 
 limit_switch_h = Limit(brain.three_wire_port.h)
 
 #autonomous code blocks for simplification
-def goStraight(speed, distance):
-  rightFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  rightBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  leftFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  leftMiddleMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  leftBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=True)
+def goStraight(speed, distance, True_or_False):
+  driveTrain.drive_for(FORWARD, distance, MM, velocity=speed, units_v=VelocityUnits.PERCENT, wait=True_or_False)
 
-def rotateRight(speed, distance):
-  rightFrontMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
-  rightBackMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
-  leftFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  leftBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  leftBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=True)
+def rotateRight(speed, angle, True_or_False):
+  driveTrain.turn_for(RIGHT, angle, DEGREES, speed, VelocityUnits.PERCENT, wait=True_or_False)
 
-def rotateLeft(speed, distance):
-  rightFrontMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  rightMiddleMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  rightBackMotor.spin_for(FORWARD, distance, DEGREES, speed, PercentUnits, wait=False)
-  leftFrontMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
-  leftBackMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=False)
-  leftBackMotor.spin_for(FORWARD, -1*distance, DEGREES, speed, PercentUnits, wait=True)
-
+def rotateLeft(speed, angle, True_or_False):
+  driveTrain.turn_for(RIGHT, angle, DEGREES, speed, VelocityUnits.PERCENT, wait=True_or_False)
 
 def remote_driveTrain(Remote, rightFrontMotor, rightMiddleMotor, rightBackMotor, leftFrontMotor, leftMiddleMotor, leftBackMotor):
     #init
